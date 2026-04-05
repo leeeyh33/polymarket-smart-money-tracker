@@ -1,2 +1,20 @@
-# polymarket-smart-money-tracker
-Analyze trading activity on Polymarket prediction markets and identify active traders using public API data.
+目前 demo 已经实现了一个基础的 smart money 分析 pipeline：
+首先，通过 Polymarket API 获取已结束市场和对应的交易数据；
+然后对每个地址进行聚合，计算其在不同 market 中的胜率，并输出前几名的排行榜。
+在数据处理上，我做了一些筛选来提高结果的代表性，比如：
+    只保留开盘早期的交易，用来评估提前判断能力
+    过滤接近确定性的交易（price 接近 0 或 1）
+    对同一事件的重复 market 做去重
+    设置最小交易次数来降低噪声
+
+同时，我使用 JSON 做了本地数据持久化，方便后续分析和复现结果；
+并通过分页（offset）来扩大 sample size，尽量获取更早期的数据。
+
+目前主要遇到的问题是性能和数据质量之间的 trade-off：
+为了获得更有信息量的 early trades，需要抓取更多历史数据，但这会带来较大的 API 请求开销和运行时间。
+
+
+接下来：
+改进tradeoff
+
+跨平台套利也可以复现
